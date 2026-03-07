@@ -14,7 +14,9 @@ Quad-SMU 四通道参数测量单元
 
 ### 整体框架
 
-![develop_hardware](Document/img/develop_hardware.png) F103 修改为 F401，主要是想找一块体积小的开发板。
+![develop_hardware](Document/img/develop_hardware.png) 
+
+F103 修改为 F401，主要是想找一块体积小的开发板。
 
 ## 硬件
 
@@ -56,6 +58,12 @@ set(MX_Application_Src
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/scpi-def.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/task_scpi.c
     ${CMAKE_CURRENT_SOURCE_DIR}/../../Core/Src/main.c
+    ...
+
+
+...
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fdata-sections -ffunction-sections -u_printf_float")
+...
 ```
 
 外部依赖库 在 Drivers 文件夹下

@@ -154,8 +154,8 @@ void getCalibrationFromRange(uint32_t IscaleID, double *k, double *b) {
     *b = 7544410;
     break;
   case PMU_DAC_SCALEID_EXT:
-    *k = 4.8828125e-5;
-    *b = -251.65824;
+    *k = 7.5191854722e-9;
+    *b = 7546580;
     break;
   default:
     *k = 2.991199535114993e-10;

@@ -46,6 +46,7 @@
 #include "cmsis_os.h"
 #include "scpi/types.h"
 #include "semphr.h"
+#include "task_adc.h"
 #include "task_dac.h"
 
 
@@ -552,6 +553,34 @@ static scpi_result_t SMU_FetchQ(scpi_t * context) {
     return SCPI_RES_OK;
 }
 
+static scpi_result_t smu_getMeasureCurrent(uint8_t ch_i, scpi_t * context) {
+    // char model[10] = {0};
+    if (ch_i >= 4) {
+        return SCPI_RES_ERR;
+    }
+
+    printf("ch%d:MeasureCurrent\r\n", ch_i);
+
+    SCPI_ResultDouble(context, getMeasuredCurrent(ch_i));
+    return SCPI_RES_OK;
+}
+
+static scpi_result_t SMU_CHANnel0MeasureQ(scpi_t * context) {
+    return smu_getMeasureCurrent(0, context);
+}
+
+static scpi_result_t SMU_CHANnel1MeasureQ(scpi_t * context) {
+    return smu_getMeasureCurrent(1, context);
+}
+
+static scpi_result_t SMU_CHANnel2MeasureQ(scpi_t * context) {
+    return smu_getMeasureCurrent(2, context);
+}
+
+static scpi_result_t SMU_CHANnel3MeasureQ(scpi_t * context) {
+    return smu_getMeasureCurrent(3, context);
+}
+
 static scpi_result_t SMU_Calibrate(scpi_t * context) {
     printf(":Calibrate\r\n");
 
@@ -887,7 +916,7 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "STATus:PRESet", .callback = SCPI_StatusPreset,},
 
     /* SMU */
-    //指令发送错误的话，软件会进入断言停止进一步执行
+    //指令发送错误的话，软件会进入断言停止进一步执行FUNCtion
     {.pattern = ":CHANnel0:FUNCtion", .callback = SMU_CHANnel0Function,},    //:CHANnel0:FUNCtion "HIZMV"  字符串最后需要增加0x0A，调试软件先输入字符串，再勾选十六进制发送，此时可增加 0A结束符，最后发送。
     {.pattern = ":CHANnel0:FUNCtion?", .callback = SMU_CHANnel0FunctionQ,},  //:CHANnel0:FUNCtion?
     {.pattern = ":CHANnel0:CURRent:RANGe?", .callback = SMU_CHANnel0CurrentRangeQ,},
@@ -953,6 +982,10 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = ":CHANnel3:CURRent:PROTection:LOWer?", .callback = SMU_CHANnel3CurrentProtectionLowerQ,},
 
     {.pattern = "FETCh?", .callback = SMU_FetchQ,},
+    {.pattern = ":CHANnel0:MEASure:CURRent?", .callback = SMU_CHANnel0MeasureQ,},
+    {.pattern = ":CHANnel1:MEASure:CURRent?", .callback = SMU_CHANnel1MeasureQ,},
+    {.pattern = ":CHANnel2:MEASure:CURRent?", .callback = SMU_CHANnel2MeasureQ,},
+    {.pattern = ":CHANnel3:MEASure:CURRent?", .callback = SMU_CHANnel3MeasureQ,},
     {.pattern = "Calibrate", .callback = SMU_Calibrate,},
 
     {.pattern = "MEASure:VOLTage:DC?", .callback = DMM_MeasureVoltageDcQ,},

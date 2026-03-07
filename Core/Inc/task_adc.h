@@ -6,6 +6,8 @@
 
 extern uint32_t ad7190_val[4];
 
+double getMeasuredCurrent(uint8_t ch);
+double getMeasuredVoltage(uint8_t ch);
 void getMeasuredString(uint8_t ch, char *buffer, size_t bufferSize);
 
 void task_adc_init(void);
