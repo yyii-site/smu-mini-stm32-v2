@@ -36,9 +36,10 @@ add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
-add_subdirectory(Drivers/lwrb)
-add_subdirectory(Drivers/u8g2/csrc)
-add_subdirectory(Drivers/libscpi)
+add_subdirectory(Middlewares/Third_Party/lwrb)
+add_subdirectory(Middlewares/Third_Party/u8g2/csrc)
+add_subdirectory(Middlewares/Third_Party/libscpi)
+add_subdirectory(Middlewares/Third_Party/FlashDB)
 
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
@@ -48,6 +49,14 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    ${PROJECT_SOURCE_DIR}/Core/Src/ui.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/ad5522.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/ad7190.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/task_adc.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/task_dac.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/scpi-def.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/task_scpi.c
+    ${PROJECT_SOURCE_DIR}/Core/Src/app_flashdb.c
 )
 
 # Add include paths
@@ -71,4 +80,5 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     lwrb
     u8g2
     libscpi
+    flashdb
 )
